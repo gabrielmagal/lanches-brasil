@@ -1,0 +1,18 @@
+﻿.hero-section {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+h1, h2 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-primary {
+    background-color: #FF3D00;
+    border-color: #FF3D00;
+}
+
+.btn-primary:hover {
+    background-color: #D83600;
+    border-color: #D83600;
+}

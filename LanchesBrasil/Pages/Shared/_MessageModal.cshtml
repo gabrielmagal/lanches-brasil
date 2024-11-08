@@ -1,0 +1,26 @@
+﻿<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showMessageModal(title, message, isSuccess) {
+        document.getElementById('messageModalLabel').innerText = title;
+        document.getElementById('modalMessage').innerText = message;
+        document.getElementById('messageModalLabel').className = isSuccess ? 'text-success' : 'text-danger';
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        messageModal.show();
+    }
+</script>

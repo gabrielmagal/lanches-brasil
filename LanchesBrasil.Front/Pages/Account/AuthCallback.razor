@@ -1,0 +1,60 @@
+﻿@page "/auth-callback"
+@using System.Text.Json
+@using Blazored.LocalStorage
+@using System.Text.Json.Serialization
+@using LanchesBrasil.Commons.Model
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        var code = queryParams["code"];
+
+        if (!string.IsNullOrEmpty(code))
+        {
+            await ExchangeCodeForTokenAsync(code);
+        }
+    }
+
+    private async Task ExchangeCodeForTokenAsync(string code)
+    {
+        var tokenEndpoint = "http://localhost:8083/realms/lanchesbrasil/protocol/openid-connect/token";
+        var clientId = "lanchesbrasil-app";
+        var redirectUri = NavigationManager.ToAbsoluteUri("/auth-callback").ToString();
+
+        var requestContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            { "client_id", clientId },
+            { "grant_type", "authorization_code" },
+            { "code", code },
+            { "redirect_uri", redirectUri },
+        });
+
+        var response = await HttpClient.PostAsync(tokenEndpoint, requestContent);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var tokenResponse = JsonSerializer.Deserialize<TokenResponseKeycloak>(content);
+                await LocalStorage.SetItemAsync("accessToken", tokenResponse?.AccessToken);
+                await LocalStorage.SetItemAsync("refreshToken", tokenResponse?.RefreshToken);
+                NavigationManager.NavigateTo("/", true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao desserializar a resposta: " + ex.Message);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Erro ao chamar o token endpoint. StatusCode: {response.StatusCode}");
+        }
+    }
+}

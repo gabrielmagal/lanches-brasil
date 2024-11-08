@@ -1,0 +1,50 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+        <div class="text-center mb-4">
+            <img src="https://plus.unsplash.com/premium_photo-1670601440146-3b33dfcd7e17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDh8fHBpenphfGVufDB8fHx8MTY5OTk4OTM3Nw&ixlib=rb-4.0.3&q=80&w=400" alt="Login Icon" class="rounded-circle" style="width: 100px; height: 100px;">
+        </div>
+        <h3 class="text-center mb-3">Cadastro de usuário</h3>
+        <form method="post" onsubmit="handleFormSubmission(event)">
+            <div class="form-group mb-3">
+                <label class="form-check-label" for="Usuario">Usuário</label>
+                <input asp-for="Usuario" type="text" class="form-control" />
+
+                <label class="form-check-label" for="Senha">Senha</label>
+                <input asp-for="Senha" type="text" class="form-control" />
+
+                <label class="form-check-label" for="Email">Email</label>
+                <input asp-for="Email" type="text" class="form-control" />
+
+                <label class="form-check-label" for="Cep">Cep</label>
+                <input asp-for="Cep" type="text" class="form-control" />
+
+                <label class="form-check-label" for="Endereco">Endereco</label>
+                <input asp-for="Endereco" type="text" class="form-control" />
+
+                <label class="form-check-label" for="DataNascimento">DataNascimento</label>
+                <input asp-for="DataNascimento" type="date" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_MessageModal")
+
+<script>
+    function handleFormSubmission(event) {
+        event.preventDefault();
+        const isSuccessful = true;
+        if (isSuccessful) {
+            showMessageModal('Sucesso', 'Usuário cadastrado com sucesso!', true);
+        } else {
+            showMessageModal('Erro', 'Falha ao cadastrar o usuário.', false);
+        }
+    }
+</script>
